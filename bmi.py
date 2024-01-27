@@ -24,7 +24,7 @@ class App(customtkinter.CTk):
         
         #data
         self.height_int = customtkinter.IntVar(value=170)
-        self.weight_float = customtkinter.DoubleVar(value=65)
+        self.weight_float = customtkinter.DoubleVar(value=45)
         self.bmi_string = customtkinter.StringVar()
         self.update_bmi()
         
@@ -99,7 +99,7 @@ class WeightInput(customtkinter.CTkFrame):
         #widgets
         font = customtkinter.CTkFont(family=FONT, size=INPUT_FONT_SIZE)
     
-        label = customtkinter.CTkLabel(self,text='70Kg',text_color=BLACK, font=font)
+        label = customtkinter.CTkLabel(self,textvariable=self.out_string,text_color=BLACK, font=font)
         label.grid(row=0,column=2)
         
         #buttons
@@ -138,6 +138,8 @@ class WeightInput(customtkinter.CTkFrame):
             
         else:
             print("ya une erreur dans cette fonction")
+        
+        self.out_string.set(f'{round(self.weight_float.get(),1)}Kg')
     
 class HeightInput(customtkinter.CTkFrame):
     def __init__(self,parent,height_int):

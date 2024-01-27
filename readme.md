@@ -16,3 +16,5 @@ Run the program: Execute the Python script (e.g., python bmi_calculator.py).
 Enter your height: Provide your height in meters when prompted.
 Enter your weight: Provide your weight in kilograms when prompted.
 View results: The program will display your calculated BMI value and its corresponding weight category.
+
+![Alt text](image.png)
