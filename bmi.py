@@ -124,8 +124,21 @@ class WeightInput(customtkinter.CTkFrame):
     # different cases based on the value of `info`.   
     
     def update_weight(self,info=None):
-        print("update")
-  
+        # amount = 1 if info[1] == 'large' else 0.1
+        amount = 1
+        if info and info[0] == 'minus' and info[1] == 'large':
+            self.weight_float.set(self.weight_float.get() - amount)   
+        elif info and info[0] == 'plus' and info[1] == 'large' :
+            self.weight_float.set(self.weight_float.get() + amount)
+      
+        elif info and info[0] == 'minus' and info[1] == 'small':
+            self.weight_float.set(self.weight_float.get() - 0.1)   
+        elif info and info[0] == 'plus' and info[1] == 'small':
+            self.weight_float.set(self.weight_float.get() + 0.1)
+            
+        else:
+            print("ya une erreur dans cette fonction")
+    
 class HeightInput(customtkinter.CTkFrame):
     def __init__(self,parent,height_int):
         super().__init__(master=parent,fg_color=WHITE)
