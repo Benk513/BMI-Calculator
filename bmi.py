@@ -11,7 +11,7 @@ class App(customtkinter.CTk):
         
         #window setup
         super().__init__(fg_color=GREEN)
-        self.title('')
+        self.title('Calculateur d\'IMC')
         #self.iconbitmap('empty.ico')
         self.geometry('400x400')
         self.resizable(False,False)
@@ -20,7 +20,7 @@ class App(customtkinter.CTk):
         
         #layout
         self.columnconfigure(0,weight=1)
-        self.rowconfigure((0,1,2,3),weight=1,uniform='a')
+        self.rowconfigure((0,1,2,3,4),weight=1,uniform='a')
         
         #data
         self.height_int = customtkinter.IntVar(value=170)
@@ -36,6 +36,7 @@ class App(customtkinter.CTk):
         
         
         #widgets
+        Heading(self)
         ResultText(self,self.bmi_string)
         WeightInput(self,self.weight_float)
         HeightInput(self,self.height_int)
@@ -61,16 +62,23 @@ class App(customtkinter.CTk):
             pass    
 
 
+class Heading(customtkinter.CTkLabel):
+    def __init__(self,parent):
+        font = customtkinter.CTkFont(family=FONT,size=HEADING_TEXT_SIZE,weight='bold')
+        super().__init__(master=parent,text="Calculer Votre IMC" ,text_color=WHITE,font=font)
+        self.grid(column =0, row =0  , sticky = 'nsew')
+        
+        
 class ResultText(customtkinter.CTkLabel):
     def __init__(self,parent,bmi_string):
         font = customtkinter.CTkFont(family=FONT,size=MAIN_TEXT_SIZE,weight='bold')
         super().__init__(master=parent,text=22.5 ,text_color=WHITE,font=font,textvariable = bmi_string)
-        self.grid(column =0, row =0 , rowspan=2 , sticky = 'nsew')
+        self.grid(column =0, row =1 , rowspan=2 , sticky = 'nsew')
 
 class WeightInput(customtkinter.CTkFrame):
     def __init__(self,parent, weight_float):
         super().__init__(master=parent,fg_color=WHITE)
-        self.grid(column =0,row=2,sticky='nsew', padx=10, pady=10)
+        self.grid(column =0,row=3,sticky='nsew', padx=10, pady=10)
         
         self.weight_float = weight_float
         
@@ -144,7 +152,7 @@ class WeightInput(customtkinter.CTkFrame):
 class HeightInput(customtkinter.CTkFrame):
     def __init__(self,parent,height_int):
         super().__init__(master=parent,fg_color=WHITE)
-        self.grid(row = 3, column=0, sticky='nsew',padx=10,pady=10)
+        self.grid(row = 4, column=0, sticky='nsew',padx=10,pady=10)
         
         font = customtkinter.CTkFont(family=FONT, size=INPUT_FONT_SIZE)
         

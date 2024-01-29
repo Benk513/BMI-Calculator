@@ -1,1 +1,1 @@
-update_weight
+self
