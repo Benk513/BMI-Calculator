@@ -23,6 +23,7 @@ class App(customtkinter.CTk):
         self.rowconfigure((0,1,2,3,4),weight=1,uniform='a')
         
         #data
+        self.metric_bool=customtkinter.BooleanVar(value=True)
         self.height_int = customtkinter.IntVar(value=170)
         self.weight_float = customtkinter.DoubleVar(value=45)
         self.bmi_string = customtkinter.StringVar()
@@ -31,7 +32,7 @@ class App(customtkinter.CTk):
         #tracing
         self.height_int.trace_add('write',self.update_bmi)
         self.weight_float.trace_add('write',self.update_bmi)
-        
+        self.metric_bool.trace_add('write',self.change_units)
         
         
         
@@ -39,8 +40,8 @@ class App(customtkinter.CTk):
         Heading(self)
         ResultText(self,self.bmi_string)
         WeightInput(self,self.weight_float)
-        HeightInput(self,self.height_int)
-        UnitSwitcher(self)
+        self.height_input = HeightInput(self,self.height_int , self.metric_bool)
+        UnitSwitcher(self,self.metric_bool)
           
     
         self.mainloop()
@@ -50,6 +51,9 @@ class App(customtkinter.CTk):
         weight_kg = self.weight_float.get()
         bmi_result= round(weight_kg / height_meter **2,2)
         self.bmi_string.set(bmi_result)
+    
+    def change_units(self,*args):
+        self.height_input.update_text(self.height_int.get())
 
     
     def change_title_bar_color(self):
@@ -150,9 +154,11 @@ class WeightInput(customtkinter.CTkFrame):
         self.out_string.set(f'{round(self.weight_float.get(),1)}Kg')
     
 class HeightInput(customtkinter.CTkFrame):
-    def __init__(self,parent,height_int):
+    def __init__(self,parent,height_int , metric_bool):
         super().__init__(master=parent,fg_color=WHITE)
         self.grid(row = 4, column=0, sticky='nsew',padx=10,pady=10)
+        
+        self.metric_bool = metric_bool
         
         font = customtkinter.CTkFont(family=FONT, size=INPUT_FONT_SIZE)
         
@@ -177,17 +183,35 @@ class HeightInput(customtkinter.CTkFrame):
         output_text.pack(side='left' ,padx=20)
     
     def update_text(self,amount):
-        text_string = str(int(amount))
-        meter = text_string[0]
-        cm = text_string[1:]
-        self.output_string.set(f'{meter}.{cm}m')
+        if self.metric_bool.get():
+            text_string = str(int(amount))
+            meter = text_string[0]
+            cm = text_string[1:]
+            self.output_string.set(f'{meter}.{cm}m')
+        else:
+            #imperial
+            feet ,inches = divmod(amount /2.54 , 12)
+            self.output_string.set(f'{int(feet)}\'{int(inches)}\'')
+            
         
 
 class UnitSwitcher(customtkinter.CTkLabel):
-    def __init__(self,parent):
+    def __init__(self,parent,metric_bool):
         super().__init__(master=parent,text='metric',text_color=DARK_GREEN,font=customtkinter.CTkFont(family=FONT,size=SWITCH_FONT_SIZE,weight='bold'))
+        self.metric_bool= metric_bool
         
         self.place(relx=0.98,rely=0.01, anchor='ne')
+        
+        self.bind('<Button>', self.change_units)
+        
+    def change_units(self,event):
+        self.metric_bool.set(not self.metric_bool.get())
+        
+        if self.metric_bool.get():
+            self.configure(text='metric')
+        else:
+            self.configure(text='imperial')
+        
         
         
         
